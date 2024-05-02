@@ -8,7 +8,8 @@
     ## 1. network 생성
     make vpc
 
-    ## 2.
+    ## 2. S3 Bucket 생성
+    make s3
 ```
 
 ## Reference 
