@@ -29,6 +29,7 @@ import {
 
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useGroupsValue } from "../../hooks/useGroupsValue";
+import { useEffect } from "react";
 
 export default function FormContainer() {
   const { rangePickerValue, setRangePicker } = useRangePicker();
@@ -39,6 +40,11 @@ export default function FormContainer() {
   const shoppingValue = useSelector((state: RootState) => state.shopping.value);
   const HandleSubmit = () =>
     useFormSubmit(shoppingValue, rangePickerValue, dispatch);
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    console.log("유저 Id", userId);
+  }, []);
 
   return (
     <StyledFormContainer>

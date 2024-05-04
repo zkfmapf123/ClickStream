@@ -46,6 +46,7 @@ export const CATEGORY_LIST = [
     key: '50000010',
     label: '면세점',
   },
+
   {
     key: '50005542',
     label: '도서',

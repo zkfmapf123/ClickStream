@@ -7,5 +7,6 @@ terraform.tfstate.backup
 build
 node_modules
 
-
-
+## lambda
+bootstrap
+*.zip

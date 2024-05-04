@@ -1,4 +1,5 @@
-import ShoppingInsight from './pages/ShoppingInsight';
+import { useEffect } from "react";
+import ShoppingInsight from "./pages/ShoppingInsight";
 
 function App() {
   return <ShoppingInsight />;
