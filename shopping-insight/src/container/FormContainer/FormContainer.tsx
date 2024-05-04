@@ -30,6 +30,7 @@ import {
 import { useFormSubmit } from "../../hooks/useFormSubmit";
 import { useGroupsValue } from "../../hooks/useGroupsValue";
 import { useEffect } from "react";
+import { useClickEvent } from "../../hooks/useClickEvent";
 
 export default function FormContainer() {
   const { rangePickerValue, setRangePicker } = useRangePicker();
@@ -42,8 +43,17 @@ export default function FormContainer() {
     useFormSubmit(shoppingValue, rangePickerValue, dispatch);
 
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    console.log("유저 Id", userId);
+    const EntryPoint = async () => {
+      await useClickEvent({
+        clickEvent: "visit",
+        userId: "leedonggyu",
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+      });
+    };
+
+    EntryPoint();
   }, []);
 
   return (

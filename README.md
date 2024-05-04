@@ -7,9 +7,11 @@
 - [x] Front ECS
 - [x] Lambda Functions
 - [x] Connect Lambda ALB
-- [ ] SQS
-- [ ] Connect SQS Lambda
+- [x] SQS
+- [x] SQS SendMessage
+- [ ] SQS PollingMessage
 - [ ] Ingest S3
+- [ ] Module
 
 ## 구성 방법
 
@@ -27,7 +29,8 @@
 
 ## ClickStream
 
-... 
+- Lambda -> s3 Ingestion 시, Put 비용이슈를 줄이기 위해 Queue를 Batch성으로 Put
+- SQS -> Kinesis DataStream으로 진행해도 좋을듯
 
 ## Frontend Unique Id
 
@@ -64,6 +67,44 @@ root.render(
     <App />
   </RTKProvider>
 );
+```
+
+### Event 기반 함수호출
+
+```ts
+import axios from "axios";
+import dayjs from 'dayjs'
+
+interface Props {
+  clickEvent: string;
+  userId: string;
+  userAgent: string;
+  platform: string;
+  language: string;
+}
+
+export const useClickEvent = async (props: Props) => {
+  try {
+    const res = await axios.post(REACT_ALB_URL, {
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body: {
+        clickEvent: props.clickEvent,
+        userId: props.userId,
+        userAgent: props.userAgent,
+        platform: props.platform,
+        language: props.language,
+        eventCreatedAt: dayjs().unix()
+      }
+    });
+
+    console.log("Response:", res.data);
+  } catch (error) {
+
+    console.error("Error:", error);
+  }
+};
 ```
 
 

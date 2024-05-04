@@ -1,7 +1,6 @@
 ## Terraform Settings
 setting:
-	@cd infra && terraform init && terraform apply
-
+	@cd infra && terraform init && terraform apply --auto-approve
 
 ## Shopping Insight 배포
 upload-fe:

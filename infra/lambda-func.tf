@@ -1,3 +1,11 @@
+variable "clickStream-zip" {
+  default = "clickStream-1.zip"
+}
+
+variable "consumeStream-zip" {
+  default = "consumeStream.zip"
+}
+
 resource "aws_iam_role" "lambda_role" {
   name = "lambda-click-stream-role"
 
@@ -21,11 +29,19 @@ resource "aws_iam_policy" "lambda_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
+        Effect = "Allow"
+        Action = "lambda:InvokeFunction"
+        Resource = [
+          "arn:aws:lambda:ap-northeast-2:*:function:getClickEvents",
+          "arn:aws:lambda:ap-northeast-2:*:function:consumeClickEvents",
+        ]
+      },
+      {
         "Effect" : "Allow",
         "Action" : [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
-          "logs:PutLogEvents",
+          "logs:PutLogEvents"
         ],
         "Resource" : [
           "*"
@@ -44,7 +60,8 @@ resource "aws_iam_policy" "lambda_policy" {
         "Effect" : "Allow",
         "Action" : [
           "sqs:ReceiveMessage",
-          "sqs:DeleteMessage"
+          "sqs:DeleteMessage",
+          "sqs:sendmessage"
         ],
         "Resource" : ["*"]
       },
@@ -56,11 +73,10 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.lambda_policy.arn
 }
-
 data "archive_file" "clickStream" {
   type        = "zip"
   source_file = "../functions/getClickEvents/bootstrap"
-  output_path = "clickStream.zip"
+  output_path = var.clickStream-zip
 }
 
 module "getClickEvents" {
@@ -71,7 +87,7 @@ module "getClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = "clickStream.zip"
+    filename = var.clickStream-zip
     handler  = "bootstrap"
     name     = "getClickEvents"
   }
@@ -83,7 +99,7 @@ module "getClickEvents" {
   }
 
   env_vars = {
-
+    QUEUE_NAME = "${aws_sqs_queue.queue.url}"
   }
 
   tags = {
@@ -96,7 +112,7 @@ module "getClickEvents" {
 data "archive_file" "consumeStream" {
   type        = "zip"
   source_file = "../functions/consumeClickEvents/bootstrap"
-  output_path = "consumeStream.zip"
+  output_path = var.consumeStream-zip
 }
 
 module "consumeClickEvents" {
@@ -107,7 +123,7 @@ module "consumeClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = "consumeStream.zip"
+    filename = var.consumeStream-zip
     handler  = "bootstrap"
     name     = "consumeClickEvents"
   }
