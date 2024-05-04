@@ -9,17 +9,20 @@ module "vpc" {
   is_enable_nat = true
   webserver_subnets = {
     "a" : "10.0.1.0/24"
-    "b" : "10.0.2.0/24"
+    "b" : "10.0.2.0/24",
+    "c" : "10.0.3.0/24"
   }
 
   was_subnets = {
     "a" : "10.0.100.0/24"
-    "b" : "10.0.101.0/24"
+    "b" : "10.0.101.0/24",
+    "c" : "10.0.102.0/24"
   }
 
   db_subnets = {
     "a" : "10.0.200.0/24"
-    "b" : "10.0.201.0/24"
+    "b" : "10.0.201.0/24",
+    "c" : "10.0.202.0/24"
   }
 
   endpoint_setting = {
@@ -29,8 +32,4 @@ module "vpc" {
     codepipeline_is_enable = false
     apigateway_is_enable   = false
   }
-}
-
-output "out" {
-  value = module.vpc
 }

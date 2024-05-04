@@ -5,14 +5,20 @@
 ## 구성 방법
 
 ```sh
-    ## 1. network 생성
-    make vpc
+    ## docker push
+    make upload-fe
 
-    ## 2. S3 Bucket 생성
-    make s3
+    ## Infra Settings
+    make setting
+
 ```
+
+## ClickStream
+
+... 
 
 ## Reference 
 
 - <a href="https://registry.terraform.io/modules/zkfmapf123/vpc3tier/lee/latest"> terraform vpc3tier module </a>
+- <a href="https://registry.terraform.io/modules/zkfmapf123/ecs-fargate/lee/latest"> terraform ecs module </a>
 - <a href="https://aws.amazon.com/ko/blogs/korea/new-solution-clickstream-analytics-on-aws-for-mobile-and-web-applications/"> ClickStream  Documents </a>
