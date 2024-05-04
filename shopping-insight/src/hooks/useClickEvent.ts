@@ -11,7 +11,7 @@ interface Props {
 
 export const useClickEvent = async (props: Props) => {
   try {
-    const res = await axios.post("https://l28oue8dyl.execute-api.ap-northeast-2.amazonaws.com/getClickEvents", {
+    const res = await axios.post(process.env.REACT_CLICK_STREAM_URL, {
       headers : {
         "Content-Type" : "application/json"
       },

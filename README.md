@@ -85,7 +85,7 @@ interface Props {
 
 export const useClickEvent = async (props: Props) => {
   try {
-    const res = await axios.post(REACT_ALB_URL, {
+    const res = await axios.post(process.env.REACT_CLICK_STREAM_URL, {
       headers : {
         "Content-Type" : "application/json"
       },
