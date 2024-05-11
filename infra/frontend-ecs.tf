@@ -51,6 +51,10 @@ module "ecs" {
       {
         name  = "PORT",
         value = "3000"
+      },
+      {
+        name  = "REACT_APP_CLICK_STREAM_URL",
+        value = "https://l28oue8dyl.execute-api.ap-northeast-2.amazonaws.com/getClickEvents"
       }
     ],
     portMappings = [

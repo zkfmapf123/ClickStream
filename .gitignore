@@ -6,6 +6,7 @@ terraform.tfstate.backup
 ## frontend
 build
 node_modules
+.env
 
 ## lambda
 bootstrap

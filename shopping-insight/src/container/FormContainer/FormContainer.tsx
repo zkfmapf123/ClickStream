@@ -39,21 +39,24 @@ export default function FormContainer() {
   const dispatch = useDispatch();
 
   const shoppingValue = useSelector((state: RootState) => state.shopping.value);
-  const HandleSubmit = () =>
+  const HandleSubmit = async () => {
+    await EventEntryPoint("submit");
     useFormSubmit(shoppingValue, rangePickerValue, dispatch);
+  };
+
+  const EventEntryPoint = async (clickEvent: string) => {
+    const userId = JSON.parse(sessionStorage.getItem("userId"));
+    await useClickEvent({
+      clickEvent,
+      userId: userId,
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      platform: navigator.platform,
+    });
+  };
 
   useEffect(() => {
-    const EntryPoint = async () => {
-      await useClickEvent({
-        clickEvent: "visit",
-        userId: "leedonggyu",
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        platform: navigator.platform,
-      });
-    };
-
-    EntryPoint();
+    EventEntryPoint("visit");
   }, []);
 
   return (
