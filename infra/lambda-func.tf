@@ -1,9 +1,6 @@
-variable "clickStream-zip" {
-  default = "clickStream-1.zip"
-}
-
-variable "consumeStream-zip" {
-  default = "consumeStream.zip"
+resource "random_string" "random" {
+  length  = 10
+  special = false
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -76,7 +73,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 data "archive_file" "clickStream" {
   type        = "zip"
   source_file = "../functions/getClickEvents/bootstrap"
-  output_path = var.clickStream-zip
+  output_path = "clickStream-${random_string.random.result}.zip"
 }
 
 module "getClickEvents" {
@@ -87,7 +84,7 @@ module "getClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = var.clickStream-zip
+    filename = "clickStream-${random_string.random.result}.zip"
     handler  = "bootstrap"
     name     = "getClickEvents"
   }
@@ -112,7 +109,7 @@ module "getClickEvents" {
 data "archive_file" "consumeStream" {
   type        = "zip"
   source_file = "../functions/consumeClickEvents/bootstrap"
-  output_path = var.consumeStream-zip
+  output_path = "consumeStream-${random_string.random.result}.zip"
 }
 
 module "consumeClickEvents" {
@@ -123,7 +120,7 @@ module "consumeClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = var.consumeStream-zip
+    filename = "consumeStream-${random_string.random.result}.zip"
     handler  = "bootstrap"
     name     = "consumeClickEvents"
   }

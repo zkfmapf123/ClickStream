@@ -30,6 +30,8 @@ var (
 func handler(ctx context.Context, request events.ALBTargetGroupRequest) (events.ALBTargetGroupResponse, error) {
 	msg := "OK! Put Data"
 
+	fmt.Println("reqBody >> ", request.Body)
+
 	var data map[string]BodyDataParams
 	if err := json.Unmarshal([]byte(request.Body), &data); err != nil {
 		fmt.Println("JSON 구문 분석 오류:", err)
