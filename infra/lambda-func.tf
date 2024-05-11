@@ -1,6 +1,9 @@
-resource "random_string" "random" {
-  length  = 10
-  special = false
+resource "random_uuid" "random" {
+
+  keepers = {
+    always_generate = "${timestamp()}"
+  }
+
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -58,7 +61,8 @@ resource "aws_iam_policy" "lambda_policy" {
         "Action" : [
           "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
-          "sqs:sendmessage"
+          "sqs:sendmessage",
+          "sqs:GetQueueAttributes"
         ],
         "Resource" : ["*"]
       },
@@ -73,7 +77,7 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 data "archive_file" "clickStream" {
   type        = "zip"
   source_file = "../functions/getClickEvents/bootstrap"
-  output_path = "clickStream-${random_string.random.result}.zip"
+  output_path = "clickStream-${random_uuid.random.result}.zip"
 }
 
 module "getClickEvents" {
@@ -84,7 +88,7 @@ module "getClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = "clickStream-${random_string.random.result}.zip"
+    filename = "clickStream-${random_uuid.random.result}.zip"
     handler  = "bootstrap"
     name     = "getClickEvents"
   }
@@ -109,7 +113,7 @@ module "getClickEvents" {
 data "archive_file" "consumeStream" {
   type        = "zip"
   source_file = "../functions/consumeClickEvents/bootstrap"
-  output_path = "consumeStream-${random_string.random.result}.zip"
+  output_path = "consumeStream-${random_uuid.random.result}.zip"
 }
 
 module "consumeClickEvents" {
@@ -120,7 +124,7 @@ module "consumeClickEvents" {
 
   lambda_config = {
     iam_name = aws_iam_role.lambda_role.name
-    filename = "consumeStream-${random_string.random.result}.zip"
+    filename = "consumeStream-${random_uuid.random.result}.zip"
     handler  = "bootstrap"
     name     = "consumeClickEvents"
   }
@@ -132,7 +136,7 @@ module "consumeClickEvents" {
   }
 
   env_vars = {
-
+    QUEUE_NAME = "${aws_sqs_queue.queue.url}"
   }
 
   tags = {

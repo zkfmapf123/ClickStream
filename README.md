@@ -107,6 +107,29 @@ export const useClickEvent = async (props: Props) => {
 };
 ```
 
+## 추가작업) API Gateway 설정
+
+![2](./public/2.png)
+
+- API Gateway 경로에 Lambda 생성
+
+## 추가작업) Event Bridge Pipe 설정
+
+![3](./public/3.png)
+
+- BatchSize를 조절하자...
+
+## Lambda 함수 배포시, 자동으로 업데이트 
+
+```terraform
+resource "random_uuid" "random" {
+
+  keepers = {
+    always_generate = "${timestamp()}"
+  }
+}
+```
+
 
 ## Reference 
 
