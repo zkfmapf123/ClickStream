@@ -9,7 +9,7 @@
 - [x] Connect Lambda ALB
 - [x] SQS
 - [x] SQS SendMessage
-- [ ] SQS PollingMessage
+- [x] SQS PollingMessage
 - [ ] Ingest S3
 - [ ] Module
 
